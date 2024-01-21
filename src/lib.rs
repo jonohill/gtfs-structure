@@ -46,6 +46,7 @@ extern crate serde_derive;
 mod enums;
 pub mod error;
 mod gtfs;
+#[cfg(feature = "reader")]
 mod gtfs_reader;
 pub(crate) mod objects;
 mod raw_gtfs;
@@ -56,6 +57,7 @@ mod tests;
 
 pub use error::Error;
 pub use gtfs::Gtfs;
+#[cfg(feature = "reader")]
 pub use gtfs_reader::GtfsReader;
 pub use objects::*;
 pub use raw_gtfs::RawGtfs;

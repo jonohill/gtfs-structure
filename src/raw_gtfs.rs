@@ -1,6 +1,8 @@
 use crate::objects::*;
 use crate::Error;
+#[cfg(feature = "reader")]
 use crate::GtfsReader;
+#[cfg(feature = "reader")]
 use std::path::Path;
 
 /// Data structure that map the GTFS csv with little intelligence
@@ -70,11 +72,13 @@ impl RawGtfs {
     ///
     /// To read from an url, build with read-url feature
     /// See also [RawGtfs::from_url] and [RawGtfs::from_path] if you don’t want the library to guess
+    #[cfg(feature = "reader")]
     pub fn new(gtfs: &str) -> Result<Self, Error> {
         GtfsReader::default().raw().read(gtfs)
     }
 
     /// Reads the raw GTFS from a local zip archive or local directory
+    #[cfg(feature = "reader")]
     pub fn from_path<P>(path: P) -> Result<Self, Error>
     where
         P: AsRef<Path> + std::fmt::Display,
@@ -85,6 +89,7 @@ impl RawGtfs {
     /// Reads the raw GTFS from a remote url
     ///
     /// The library must be built with the read-url feature
+    #[cfg(feature = "reader")]
     #[cfg(feature = "read-url")]
     pub fn from_url<U: reqwest::IntoUrl>(url: U) -> Result<Self, Error> {
         GtfsReader::default().raw().read_from_url(url)
@@ -93,6 +98,7 @@ impl RawGtfs {
     /// Non-blocking read the raw GTFS from a remote url
     ///
     /// The library must be built with the read-url feature
+    #[cfg(feature = "reader")]
     #[cfg(feature = "read-url")]
     pub async fn from_url_async<U: reqwest::IntoUrl>(url: U) -> Result<Self, Error> {
         GtfsReader::default().raw().read_from_url_async(url).await
@@ -101,10 +107,12 @@ impl RawGtfs {
     /// Reads for any object implementing [std::io::Read] and [std::io::Seek]
     ///
     /// Mostly an internal function that abstracts reading from an url or local file
+    #[cfg(feature = "reader")]
     pub fn from_reader<T: std::io::Read + std::io::Seek>(reader: T) -> Result<Self, Error> {
         GtfsReader::default().raw().read_from_reader(reader)
     }
 
+    #[cfg(feature = "reader")]
     pub(crate) fn unknown_to_default(&mut self) {
         if let Ok(stops) = &mut self.stops {
             for stop in stops.iter_mut() {

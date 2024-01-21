@@ -45,6 +45,7 @@ pub enum Error {
     #[error("impossible to remotely access file")]
     Fetch(#[from] reqwest::Error),
     /// Impossible to read a CSV file
+    #[cfg(feature = "reader")]
     #[error("impossible to read csv file '{file_name}'")]
     CSVError {
         /// File name that could not be parsed as CSV
@@ -56,6 +57,7 @@ pub enum Error {
         line_in_error: Option<LineError>,
     },
     /// Error when trying to unzip the GTFS archive
+    #[cfg(feature = "reader")]
     #[error(transparent)]
     Zip(#[from] zip::result::ZipError),
 }

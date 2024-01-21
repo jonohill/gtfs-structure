@@ -92,11 +92,13 @@ impl Gtfs {
     ///
     /// To read from an url, build with read-url feature
     /// See also [Gtfs::from_url] and [Gtfs::from_path] if you don’t want the library to guess
+    #[cfg(feature = "reader")]
     pub fn new(gtfs: &str) -> Result<Gtfs, Error> {
         RawGtfs::new(gtfs).and_then(Gtfs::try_from)
     }
 
     /// Reads the GTFS from a local zip archive or local directory
+    #[cfg(feature = "reader")]
     pub fn from_path<P>(path: P) -> Result<Gtfs, Error>
     where
         P: AsRef<std::path::Path> + std::fmt::Display,
@@ -107,6 +109,7 @@ impl Gtfs {
     /// Reads the GTFS from a remote url
     ///
     /// The library must be built with the read-url feature
+    #[cfg(feature = "reader")]
     #[cfg(feature = "read-url")]
     pub fn from_url<U: reqwest::IntoUrl>(url: U) -> Result<Gtfs, Error> {
         RawGtfs::from_url(url).and_then(Gtfs::try_from)
@@ -115,6 +118,7 @@ impl Gtfs {
     /// Asynchronously reads the GTFS from a remote url
     ///
     /// The library must be built with the read-url feature
+    #[cfg(feature = "reader")]
     #[cfg(feature = "read-url")]
     pub async fn from_url_async<U: reqwest::IntoUrl>(url: U) -> Result<Gtfs, Error> {
         RawGtfs::from_url_async(url).await.and_then(Gtfs::try_from)
@@ -123,6 +127,7 @@ impl Gtfs {
     /// Reads for any object implementing [std::io::Read] and [std::io::Seek]
     ///
     /// Mostly an internal function that abstracts reading from an url or local file
+    #[cfg(feature = "reader")]
     pub fn from_reader<T: std::io::Read + std::io::Seek>(reader: T) -> Result<Gtfs, Error> {
         RawGtfs::from_reader(reader).and_then(Gtfs::try_from)
     }
